@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateOwnerDto } from '../dto/create-owner.dto';
 import { GetOwnerFilterDto } from '../dto/get-owner-filter.dto';
 import { Owner } from '../entity/owner.entity';
@@ -40,5 +40,11 @@ export class OwnersRepository extends Repository<Owner> {
 
     await this.save(owner);
     return owner;
+  }
+
+  async getOwnerBy(options: FindOptionsWhere<Owner>): Promise<Owner> {
+    return await this.findOne({
+      where: options,
+    });
   }
 }

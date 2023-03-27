@@ -20,12 +20,24 @@ export class CatsService {
   }
 
   async createCat(createCatDto: CreateCatDto): Promise<Cat> {
+    const owner = await this.ownersRepository.getOwnerBy({
+      id: createCatDto.ownerId,
+    });
+
+    if (!owner) {
+      throw new NotFoundException(
+        `Owner with name '${createCatDto.ownerId}' not found`,
+      );
+    }
+
+    createCatDto.owner = owner;
     return this.catsRepository.createCat(createCatDto);
   }
 
   async findById(id: string): Promise<Cat> {
     const found = await this.catsRepository.findOne({
       where: { id },
+      relations: ['owner'],
     });
     if (!found) {
       throw new NotFoundException(`Cat with name '${id}' not found`);
@@ -35,7 +47,6 @@ export class CatsService {
 
   async delete(id: string): Promise<void> {
     const result = await this.catsRepository.delete(id);
-
     console.log(result);
   }
 

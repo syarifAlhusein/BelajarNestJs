@@ -24,7 +24,7 @@ export class OwnersService {
 
   async findById(id: string): Promise<Owner> {
     const found = await this.ownersRepository.findOne({
-      where: { id },
+      where: { id }, relations: ['cats']
     });
     if (!found) {
       throw new NotFoundException(`Owner with name '${id}' not found`);

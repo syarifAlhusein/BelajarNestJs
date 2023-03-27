@@ -16,7 +16,10 @@ export class CatsRepository extends Repository<Cat> {
   async getCats(filterDto: GetCatFilterDto): Promise<Cat[]> {
     const { status, search } = filterDto;
 
-    const query = this.createQueryBuilder('cat');
+    const query = this.createQueryBuilder('cat').leftJoinAndSelect(
+      'cat.owner',
+      'o',
+    );
 
     if (status) {
       query.andWhere('cat.status = :status', { status });
@@ -33,14 +36,15 @@ export class CatsRepository extends Repository<Cat> {
     return cat;
   }
 
-  async createCat(createCatDto: CreateCatDto): Promise<Cat> { 
-    const { name, age, breed } = createCatDto;
+  async createCat(createCatDto: CreateCatDto): Promise<Cat> {
+    const { name, age, breed, owner } = createCatDto;
 
     const newCat = this.create({
       name,
       age,
       breed,
       status: CatStatus.LIFE,
+      owner,
     });
     await this.dataSource.manager.save(newCat);
     return newCat;

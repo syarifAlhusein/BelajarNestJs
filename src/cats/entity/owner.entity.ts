@@ -25,5 +25,5 @@ export class Owner {
 
   @OneToMany(() => Cat, (cat) => cat.owner)
   @JoinColumn()
-  cats: Cat;
+  cats: Cat[];
 }
