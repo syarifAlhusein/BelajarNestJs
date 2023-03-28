@@ -15,7 +15,10 @@ export class OwnersRepository extends Repository<Owner> {
   async getOwners(filterDto: GetOwnerFilterDto): Promise<Owner[]> {
     const { status, search } = filterDto;
 
-    const query = this.createQueryBuilder('owner');
+    const query = this.createQueryBuilder('owner').leftJoinAndSelect(
+      'owner.cats',
+      'c'
+    );
 
     if (status) {
       query.andWhere('owner.status = :status', { status });

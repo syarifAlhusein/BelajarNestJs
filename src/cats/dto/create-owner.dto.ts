@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
+import { Cat } from '../entity/cat.entity';
 import { OwnerStatus } from '../interfaces/owner-status';
 
 export class CreateOwnerDto {
@@ -11,5 +12,6 @@ export class CreateOwnerDto {
   @IsNotEmpty()
   age: number;
 
-  catId: string;
+  @IsOptional()
+  cat: Cat;
 }
